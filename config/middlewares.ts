@@ -1,22 +1,20 @@
-module.exports = [
-  "strapi::errors",
-  "strapi::security",
+export default [
+  'strapi::errors',
   {
-    name: "strapi::cors",
+    name: 'strapi::cors',
     config: {
-      enabled: true,
-      origin: [
-        "http://localhost:3000", // React dev server (CRA)
-        "http://localhost:5173"  // React dev server (Vite)
-      ],
-      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+      origin: ['http://localhost:5173'],  // add your prod domain later
+      headers: '*',
+      methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+      credentials: true,
     },
   },
-  "strapi::poweredBy",
-  "strapi::logger",
-  "strapi::query",
-  "strapi::body",
-  "strapi::session",
-  "strapi::favicon",
-  "strapi::public",
+  'strapi::security',
+  'strapi::poweredBy',
+  'strapi::logger',
+  'strapi::query',
+  'strapi::body',
+  'strapi::session',
+  'strapi::favicon',
+  'strapi::public',
 ];
