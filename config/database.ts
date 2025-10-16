@@ -1,60 +1,36 @@
-import path from 'path';
+// config/database.ts
+// -----------------------------------------------------
+// Strapi Database Configuration for Local Development
+// -----------------------------------------------------
+// This config tells Strapi to use MySQL instead of SQLite.
+// It reads all connection info from .env.development.
+// -----------------------------------------------------
 
-export default ({ env }) => {
-  const client = env('DATABASE_CLIENT', 'sqlite');
+export default ({ env }) => ({
+  connection: {
+    // Dev-comment: explicitly force MySQL as the database client.
+    client: env('DATABASE_CLIENT', 'mysql'),
 
-  const connections = {
-    mysql: {
-      connection: {
-        host: env('DATABASE_HOST', 'localhost'),
-        port: env.int('DATABASE_PORT', 3306),
-        database: env('DATABASE_NAME', 'strapi'),
-        user: env('DATABASE_USERNAME', 'strapi'),
-        password: env('DATABASE_PASSWORD', 'strapi'),
-        ssl: env.bool('DATABASE_SSL', false) && {
-          key: env('DATABASE_SSL_KEY', undefined),
-          cert: env('DATABASE_SSL_CERT', undefined),
-          ca: env('DATABASE_SSL_CA', undefined),
-          capath: env('DATABASE_SSL_CAPATH', undefined),
-          cipher: env('DATABASE_SSL_CIPHER', undefined),
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
-        },
-      },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
-    },
-    postgres: {
-      connection: {
-        connectionString: env('DATABASE_URL'),
-        host: env('DATABASE_HOST', 'localhost'),
-        port: env.int('DATABASE_PORT', 5432),
-        database: env('DATABASE_NAME', 'strapi'),
-        user: env('DATABASE_USERNAME', 'strapi'),
-        password: env('DATABASE_PASSWORD', 'strapi'),
-        ssl: env.bool('DATABASE_SSL', false) && {
-          key: env('DATABASE_SSL_KEY', undefined),
-          cert: env('DATABASE_SSL_CERT', undefined),
-          ca: env('DATABASE_SSL_CA', undefined),
-          capath: env('DATABASE_SSL_CAPATH', undefined),
-          cipher: env('DATABASE_SSL_CIPHER', undefined),
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
-        },
-        schema: env('DATABASE_SCHEMA', 'public'),
-      },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
-    },
-    sqlite: {
-      connection: {
-        filename: path.join(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
-      },
-      useNullAsDefault: true,
-    },
-  };
-
-  return {
+    // Dev-comment: define database connection settings.
     connection: {
-      client,
-      ...connections[client],
-      acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
+      host: env('DATABASE_HOST', '127.0.0.1'),         // MySQL host (Docker exposes this on localhost:3306)
+      port: env.int('DATABASE_PORT', 3306),            // MySQL default port
+      database: env('DATABASE_NAME', 'anyvolt_dev'),   // Database name
+      user: env('DATABASE_USERNAME', 'anyvolt'),       // Database user
+      password: env('DATABASE_PASSWORD', 'change_me'), // Database password
+
+      // Dev-comment: disable SSL for local Docker MySQL; enable later for production.
+      ssl: env.bool('DATABASE_SSL', false)
+        ? { rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false) }
+        : false,
+
+      charset: 'utf8mb4', // Dev-comment: ensures emoji/multilingual support
     },
-  };
-};
+
+    // Dev-comment: recommended pool settings for local dev.
+    pool: { min: 2, max: 10 },
+
+    // Dev-comment: optional connection timeout in milliseconds.
+    acquireConnectionTimeout: 10000,
+  },
+});

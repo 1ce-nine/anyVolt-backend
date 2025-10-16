@@ -1,0 +1,46 @@
+[
+    {
+        "api":  "product",
+        "contentType":  "content-types",
+        "kind":  "collectionType",
+        "collectionName":  "products",
+        "attributes":  [
+                           {
+                               "name":  "name",
+                               "type":  "string",
+                               "relation":  null
+                           },
+                           {
+                               "name":  "slug",
+                               "type":  "string",
+                               "relation":  null
+                           },
+                           {
+                               "name":  "price",
+                               "type":  "decimal",
+                               "relation":  null
+                           },
+                           {
+                               "name":  "description",
+                               "type":  "blocks",
+                               "relation":  null
+                           },
+                           {
+                               "name":  "image",
+                               "type":  "media",
+                               "relation":  null
+                           }
+                       ]
+    },
+    {
+        "api":  "test",
+        "contentType":  "content-types",
+        "kind":  "collectionType",
+        "collectionName":  "tests",
+        "attributes":  {
+                           "name":  "name",
+                           "type":  "string",
+                           "relation":  null
+                       }
+    }
+]

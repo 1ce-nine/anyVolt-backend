@@ -1,0 +1,63 @@
+name: CI (migrations + build)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: ci_db
+          MYSQL_USER: ci_user
+          MYSQL_PASSWORD: ci_pw
+        ports: [ "3306:3306" ]
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysql -h 127.0.0.1 -P 3306 -uroot -proot -e "SELECT 1" >/dev/null 2>&1; then
+              echo "MySQL is up"; break;
+            fi
+            sleep 2
+          done
+
+      - name: Configure DB env
+        run: |
+          echo "DATABASE_CLIENT=mysql" >> $GITHUB_ENV
+          echo "DATABASE_HOST=127.0.0.1" >> $GITHUB_ENV
+          echo "DATABASE_PORT=3306" >> $GITHUB_ENV
+          echo "DATABASE_NAME=ci_db" >> $GITHUB_ENV
+          echo "DATABASE_USERNAME=ci_user" >> $GITHUB_ENV
+          echo "DATABASE_PASSWORD=ci_pw" >> $GITHUB_ENV
+          echo "DATABASE_SSL=false" >> $GITHUB_ENV
+
+      - name: Run migrations
+        run: npm run migrate:up
+
+      - name: Build Strapi
+        env:
+          APP_KEYS: dummy1,dummy2,dummy3,dummy4
+          API_TOKEN_SALT: dummy
+          ADMIN_JWT_SECRET: dummy
+          JWT_SECRET: dummy
+        run: npm run build
