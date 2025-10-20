@@ -1,3 +1,12 @@
+require('dotenv').config(); // <-- load .env for the node process early
+
+if (!process.env.ADMIN_AUTH_SECRET) {
+  console.error('Missing ADMIN_AUTH_SECRET in environment (.env)');
+  process.exit(1);
+}
+
+
+
 // Avoid port clash with the running dev server
 process.env.PORT = process.env.PORT || '1338';
 process.env.HOST = process.env.HOST || '127.0.0.1';

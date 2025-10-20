@@ -28,9 +28,9 @@
 
     "db:migrate": "knex migrate:latest --knexfile knexfile.cjs",
     "db:seed": "knex seed:run --knexfile knexfile.cjs",
-    "db:reset": "npm run db:migrate && npm run seed:strapi",
+    "db:reset": "npm run db:migrate && npm run seed:strapi"
 
-    "postinstall": "npm run seed:strapi"
+  
   },
 
   "dependencies": {
