@@ -21,6 +21,7 @@ const PRODUCTS = [
     price: 1500,
     description:
       'High-efficiency 5kW charging station designed for drone and EV systems. Features adaptive voltage control and solar input.',
+    voltage: 100
   },
   {
     slug: 'solardock-mini',
@@ -28,6 +29,8 @@ const PRODUCTS = [
     price: 800,
     description:
       'Compact solar-powered docking station for small UAVs and robotics. Includes integrated battery and weatherproof shell.',
+    voltage: 100
+
   },
   {
     slug: 'voltvision-sensor-kit',
@@ -35,6 +38,8 @@ const PRODUCTS = [
     price: 499,
     description:
       'Precision environmental monitoring kit with humidity, air-quality, and motion sensors. Ideal for smart infrastructure projects.',
+    voltage: 50
+
   },
   {
     slug: 'voltguard-eco-battery',
@@ -42,6 +47,8 @@ const PRODUCTS = [
     price: 999,
     description:
       'Lightweight lithium battery with thermal stability and 25% improved energy retention. Built for off-grid use cases.',
+    voltage: 50
+
   },
   {
     slug: 'anyvolt-fastcharge-pro',
@@ -49,6 +56,8 @@ const PRODUCTS = [
     price: 1899,
     description:
       'Professional-grade charger for high-demand energy storage units. Auto-balancing cells and advanced heat dispersion.',
+    voltage: 50
+
   },
   {
     slug: 'voltlink-usb-c-hub',
@@ -56,6 +65,8 @@ const PRODUCTS = [
     price: 129,
     description:
       'Aluminium 6-in-1 hub providing lightning-fast connectivity and surge protection. Perfect companion for field technicians.',
+    voltage: 64
+
   },
   {
     slug: 'ecocharge-portable-150',
@@ -63,6 +74,8 @@ const PRODUCTS = [
     price: 349,
     description:
       '150W portable power bank with solar recharge and rugged case. Ideal for outdoor projects or emergency backup.',
+    voltage: 114
+
   },
   {
     slug: 'aeropanel-flex-200',
@@ -70,6 +83,8 @@ const PRODUCTS = [
     price: 799,
     description:
       'Flexible solar panel built with reinforced composite backing. Lightweight, foldable, and drone-mount compatible.',
+    voltage: 200
+
   },
   {
     slug: 'voltmesh-network-node',
@@ -77,6 +92,8 @@ const PRODUCTS = [
     price: 950,
     description:
       'Edge network node for distributed drone communication. Provides low-latency mesh connectivity and encrypted data channels.',
+    voltage: 51
+
   },
   {
     slug: 'voltcloud-gateway',
@@ -84,6 +101,8 @@ const PRODUCTS = [
     price: 1399,
     description:
       'Secure IoT gateway enabling centralized monitoring of multiple AnyVolt devices. Includes API integration and OTA updates.',
+    voltage: 33
+
   },
   {
     slug: 'voltflow-energy-hub',
@@ -91,6 +110,8 @@ const PRODUCTS = [
     price: 2599,
     description:
         'A modular all-in-one power management system that intelligently balances solar, battery, and grid inputs. Features remote diagnostics and AI-driven efficiency tuning.',
+    voltage: 12
+
 },
     {
     slug: 'voltcore-smart-inverter',
@@ -98,6 +119,8 @@ const PRODUCTS = [
     price: 1890,
     description:
         'Next-generation inverter with adaptive load management and real-time analytics. Supports solar, battery, and grid input with seamless automatic switching for maximum uptime.',
+    voltage: 140
+
     },
 
 
@@ -107,6 +130,8 @@ const PRODUCTS = [
     price: 275,
     description:
       'Compact, high-precision GPS tracker with multi-band coverage and offline logging for field robotics.',
+    voltage: 66
+
   },
   {
     slug: 'voltcare-maintenance-kit',
@@ -114,6 +139,8 @@ const PRODUCTS = [
     price: 179,
     description:
       'Comprehensive maintenance toolkit for servicing AnyVolt systems. Includes diagnostics adapter and cleaning tools.',
+    voltage: 25
+
   },
   {
     slug: 'anyvolt-ultra-dock',
@@ -121,6 +148,8 @@ const PRODUCTS = [
     price: 2199,
     description:
       'Industrial-grade charging and data dock with modular expansion bays. Supports up to 10 simultaneous devices.',
+    voltage: 30
+
   },
   {
     slug: 'voltcharge-wall-unit',
@@ -128,6 +157,8 @@ const PRODUCTS = [
     price: 899,
     description:
       'Wall-mounted smart charger for home or lab use. Features dynamic load balancing and cloud-connected monitoring.',
+    voltage: 150
+
   },
   {
     slug: 'voltair-propulsion-core',
@@ -135,6 +166,8 @@ const PRODUCTS = [
     price: 3299,
     description:
       'Next-generation electric propulsion core for UAVs with advanced efficiency mapping and temperature regulation.',
+    voltage: 70
+
   },
 ];
 
