@@ -4,37 +4,94 @@
   "info": {
     "singularName": "product",
     "pluralName": "products",
-    "displayName": "product"
+    "displayName": "Product"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
-      "type": "string"
-    },
-    "slug": {
-      "type": "string"
-    },
-    "price": {
-      "type": "decimal"
-    },
-    "description": {
-      "type": "blocks"
-    },
+    "name": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "name" },
+
+    "price": { "type": "float" },
+    "description": { "type": "richtext" },
+
     "image": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+      "allowedTypes": ["images", "files", "videos", "audios"]
+    },
+
+    "voltage": { "type": "float" },
+
+    "motorFamily": {
+      "type": "enumeration",
+      "enum": ["AC", "DC_PM", "PM_FREE"],
+      "required": true
+    },
+    "motorType": {
+      "type": "enumeration",
+      "enum": [
+        "Asynchronous",
+        "Synchronous",
+        "Single Phase",
+        "Three Phase",
+        "Line-Start PM",
+        "Brushless with AC controller",
+        "Brushed",
+        "Brushless",
+        "Shunt",
+        "Series",
+        "Cylindrical",
+        "Axial-Flux",
+        "Reluctance",
+        "Switched Reluctance"
       ]
     },
-    "voltage": {
-      "type": "decimal"
-    }
+
+    "supplyVoltageMinV": { "type": "integer" },
+    "supplyVoltageMaxV": { "type": "integer" },
+    "ratedPowerKw": { "type": "float" },
+    "ratedTorqueNm": { "type": "float" },
+    "peakCurrentA": { "type": "float" },
+
+    "dutyCycle": {
+      "type": "enumeration",
+      "enum": ["Continuous", "Intermittent S2", "Intermittent S"]
+    },
+    "ipRating": { "type": "string" },
+    "frameSizeIec": { "type": "string" },
+    "mountType": {
+      "type": "enumeration",
+      "enum": ["Foot", "Flange", "Both"]
+    },
+
+    "hasBrake": { "type": "boolean", "default": false },
+    "brakeVoltageV": { "type": "integer" },
+    "brakeHoldingTorqueNm": { "type": "float" },
+
+    "gearboxRequired": { "type": "boolean", "default": false },
+    "gearboxType": {
+      "type": "enumeration",
+      "enum": ["Helical", "Planetary", "Worm", "Bevel", "Other"]
+    },
+    "gearboxRatio": { "type": "float" },
+
+    "maxLengthMm": { "type": "integer" },
+    "maxWidthOrDiameterMm": { "type": "integer" },
+
+    "wireConnection": {
+      "type": "enumeration",
+      "enum": ["Connection Box", "Loose Cables"]
+    },
+    "cooling": {
+      "type": "enumeration",
+      "enum": ["Fan", "Water", "Liquid"]
+    },
+
+    "otherRequirements": { "type": "text" },
+
+    "publishedAt": { "type": "datetime" }
   }
 }
