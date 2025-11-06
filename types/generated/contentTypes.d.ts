@@ -433,7 +433,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
-    displayName: 'product';
+    displayName: 'Product';
     pluralName: 'products';
     singularName: 'product';
   };
@@ -441,25 +441,72 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    brakeHoldingTorqueNm: Schema.Attribute.Float;
+    brakeVoltageV: Schema.Attribute.Integer;
+    cooling: Schema.Attribute.Enumeration<['Fan', 'Water', 'Liquid']>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Blocks;
+    description: Schema.Attribute.RichText;
+    dutyCycle: Schema.Attribute.Enumeration<
+      ['Continuous', 'Intermittent S2', 'Intermittent S']
+    >;
+    frameSizeIec: Schema.Attribute.String;
+    gearboxRatio: Schema.Attribute.Float;
+    gearboxRequired: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    gearboxType: Schema.Attribute.Enumeration<
+      ['Helical', 'Planetary', 'Worm', 'Bevel', 'Other']
+    >;
+    hasBrake: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    ipRating: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    price: Schema.Attribute.Decimal;
+    maxLengthMm: Schema.Attribute.Integer;
+    maxWidthOrDiameterMm: Schema.Attribute.Integer;
+    motorFamily: Schema.Attribute.Enumeration<['AC', 'DC_PM', 'PM_FREE']> &
+      Schema.Attribute.Required;
+    motorType: Schema.Attribute.Enumeration<
+      [
+        'Asynchronous',
+        'Synchronous',
+        'Single Phase',
+        'Three Phase',
+        'Line-Start PM',
+        'Brushless with AC controller',
+        'Brushed',
+        'Brushless',
+        'Shunt',
+        'Series',
+        'Cylindrical',
+        'Axial-Flux',
+        'Reluctance',
+        'Switched Reluctance',
+      ]
+    >;
+    mountType: Schema.Attribute.Enumeration<['Foot', 'Flange', 'Both']>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    otherRequirements: Schema.Attribute.Text;
+    peakCurrentA: Schema.Attribute.Float;
+    price: Schema.Attribute.Float;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.String;
+    ratedPowerKw: Schema.Attribute.Float;
+    ratedTorqueNm: Schema.Attribute.Float;
+    slug: Schema.Attribute.UID<'name'>;
+    supplyVoltageMaxV: Schema.Attribute.Integer;
+    supplyVoltageMinV: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    voltage: Schema.Attribute.Decimal;
+    voltage: Schema.Attribute.Float;
+    wireConnection: Schema.Attribute.Enumeration<
+      ['Connection Box', 'Loose Cables']
+    >;
   };
 }
 

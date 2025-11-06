@@ -3,41 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
-    "scripts": {
+  "scripts": {
     "dev": "npm-run-all -s seed:strapi dev:app",
     "dev:app": "npm run develop",
-
     "develop": "strapi develop",
     "build": "strapi build",
     "start": "strapi start",
     "strapi": "strapi",
-
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
-
     "migrate:make": "knex --knexfile ./knexfile.cjs migrate:make",
     "migrate:up": "knex --knexfile ./knexfile.cjs migrate:latest",
     "migrate:down": "knex --knexfile ./knexfile.cjs migrate:rollback --all",
     "migrate:status": "node -e \"const k=require('knex')(require('./knexfile.cjs'));k.migrate.list().then(([done,pending])=>{console.log('Done:',done.map(m=>m.file));console.log('Pending:',pending.map(m=>m.file));}).finally(()=>process.exit());\"",
-
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
-
     "seed:run": "node ./scripts/seed.js",
     "seed:strapi": "node scripts/seedProducts.strapi.cjs",
-
     "db:migrate": "knex migrate:latest --knexfile knexfile.cjs",
     "db:seed": "knex seed:run --knexfile knexfile.cjs",
-    "db:reset": "npm run db:migrate && npm run seed:strapi"
-
-  
+    "db:reset": "npm run db:migrate && npm run seed:strapi",
+    "kb": "node server/kb-server.js"
   },
-
   "dependencies": {
     "@strapi/plugin-cloud": "5.25.0",
     "@strapi/plugin-users-permissions": "5.25.0",
     "@strapi/strapi": "5.25.0",
+    "axios": "^1.13.1",
     "better-sqlite3": "11.3.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "fuse.js": "^7.1.0",
     "mysql2": "^3.15.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

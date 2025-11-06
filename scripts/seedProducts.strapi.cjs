@@ -21,7 +21,7 @@ const PRODUCTS = [
     name: 'AnyVolt Super Charger 5000',
     price: 1500,
     description:
-      'High-efficiency 5 kW charging station designed for drone and EV systems. Features adaptive voltage control and solar input.',
+      'High-efficiency 5 kW charging station designed for drone and EV systems. Features adaptive voltage control and solar input.  and also shark skin leather landing brushless landing pads for style',
     voltage: 100,
     motorFamily: 'AC',
     motorType: 'Synchronous',
