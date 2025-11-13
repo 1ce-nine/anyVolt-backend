@@ -1,5 +1,11 @@
 import axios from "axios";
+// Adjust the path based on where masterPrompt.ts lives
+import { buildMasterPrompt, ProductForAI } from "../masterPrompt";
 
+
+/**
+ * Helper: extract product name from "tell me about X"
+ */
 function extractProductNameFromQuestion(q: string): string | null {
   const lower = q.toLowerCase();
   const marker = "tell me about";
@@ -19,22 +25,79 @@ function extractProductNameFromQuestion(q: string): string | null {
 export default {
   // quick debug endpoint
   async echo(ctx: any) {
-    ctx.body = { ok: true, method: ctx.request.method, body: ctx.request.body ?? null };
+    ctx.body = {
+      ok: true,
+      method: ctx.request.method,
+      body: ctx.request.body ?? null,
+    };
   },
 
   // main chat endpoint
   async chat(ctx: any) {
     try {
       const { message, productId, documentId } = ctx.request.body || {};
-      const userQuestion = (message ?? "").toString().trim();
-      if (!userQuestion) return ctx.badRequest("Missing 'message'.");
 
+      // ---------------------------------------------------
+      // 1. BASIC INPUT VALIDATION + SANITISATION
+      // ---------------------------------------------------
+      if (typeof message !== "string") {
+        ctx.badRequest("Missing or invalid 'message'.");
+        return;
+      }
+
+      let sanitizedMessage = message.trim();
+      sanitizedMessage = sanitizedMessage.replace(/\s+/g, " "); // collapse whitespace
+      sanitizedMessage = sanitizedMessage.replace(
+        /[\u0000-\u001F\u007F]/g,
+        ""
+      ); // strip control chars
+
+      if (!sanitizedMessage) {
+        ctx.body = { reply: "Please enter a message." };
+        return;
+      }
+
+      if (sanitizedMessage.length > 1000) {
+        ctx.body = {
+          reply:
+            "Your message is too long. Please keep questions fairly short (under 1000 characters).",
+        };
+        return;
+      }
+
+      const userQuestion = sanitizedMessage;
+
+      // ---------------------------------------------------
+      // 2. SIMPLE PROMPT-INJECTION HEURISTICS
+      //    (We don't block, just annotate)
+      // ---------------------------------------------------
+      const injectionPatterns = [
+        "ignore previous instructions",
+        "ignore all previous instructions",
+        "act as ",
+        "system prompt",
+        "you are now",
+        "jailbreak",
+        "developer mode",
+        "override your rules",
+        "disregard previous",
+      ];
+
+      let suspectedInjection = false;
+      const lowerMsg = userQuestion.toLowerCase();
+      for (const p of injectionPatterns) {
+        if (lowerMsg.includes(p)) {
+          suspectedInjection = true;
+          break;
+        }
+      }
+
+      // ---------------------------------------------------
+      // 3. PRODUCT RESOLUTION (your existing logic)
+      // ---------------------------------------------------
       let entity: any = null;
 
-      // -------------------------------------------------------------------
-      // 1) OPTIONAL EXPLICIT LOOKUP (productId / documentId)
-      //    If this fails, we still fall through to name-based logic.
-      // -------------------------------------------------------------------
+      // 3a. EXPLICIT LOOKUP (productId / documentId)
       if (productId) {
         try {
           entity = await strapi.entityService.findOne(
@@ -60,41 +123,18 @@ export default {
           );
           entity = Array.isArray(list) ? list[0] : list;
         } catch {
-          // also ignore
+          // ignore, fall through
         }
       }
 
-      // -------------------------------------------------------------------
-      // 2) NAME-BASED LOOKUP (only give info if exact name matches)
-      // -------------------------------------------------------------------
+      // 3b. NAME-BASED LOOKUP (only if no explicit match)
       if (!entity) {
         const requestedName = extractProductNameFromQuestion(userQuestion);
 
-        // If they didn't ask in a "tell me about X" style, guide them.
+        // If they didn’t ask in a "tell me about X" style, guide them.
         if (!requestedName) {
-          const all: any[] = await strapi.entityService.findMany(
-            "api::product.product",
-            {
-              fields: ["name"],
-              publicationState: "live",
-              sort: { id: "asc" },
-              limit: 5,
-            } as any
-          );
-          const names = (all || [])
-            .map((p: any) => p?.name)
-            .filter(Boolean);
-
-          const examples = names.length
-            ? "\n\nFor example, you can say:\n" +
-              names
-                .slice(0, 3)
-                .map((n: string) => `- Tell me about ${n}`)
-                .join("\n")
-            : "";
-
-            ctx.body = {
-              reply: `Please ask: "Tell me about <exact product name>".`
+          ctx.body = {
+            reply: `Please ask: "Tell me about <exact product name>".`,
           };
           return;
         }
@@ -120,17 +160,16 @@ export default {
 
         if (!entity) {
           ctx.body = {
-            reply: `I couldn’t find that product. Please ask: "Tell me about <exact product name>".`
+            reply: `I couldn’t find that product. Please ask: "Tell me about <exact product name>".`,
           };
           return;
         }
-
       }
 
-      // -------------------------------------------------------------------
-      // 3) At this point we have a specific product entity
-      // -------------------------------------------------------------------
-      const product = {
+      // ---------------------------------------------------
+      // 4. MAP ENTITY → ProductForAI (DTO for prompt)
+      // ---------------------------------------------------
+      const product: ProductForAI = {
         id: entity.id,
         documentId: entity.documentId ?? null,
         name: entity.name ?? "Unknown product",
@@ -141,38 +180,53 @@ export default {
 
       const key = process.env.GOOGLE_API_KEY;
 
-      // DEMO MODE: no Gemini key
+      // ---------------------------------------------------
+      // 5. DEMO MODE (NO AI KEY) — for your assignment
+      // ---------------------------------------------------
       if (!key) {
-        ctx.body = {
-          reply:
-            `Demo mode (no GOOGLE_API_KEY).\n\n` +
-            (product.description || "No description available."),
-        };
+        const lines: string[] = [];
+        lines.push("Demo mode (no AI provider configured).");
+        lines.push("");
+        lines.push(`Product: ${product.name}`);
+        lines.push("");
+
+        if (product.description) {
+          lines.push(product.description);
+        } else {
+          lines.push("No description available in the product data.");
+        }
+
+        if (product.price != null) {
+          lines.push("");
+          lines.push(`Stored price: $${product.price}`);
+        }
+
+        ctx.body = { reply: lines.join("\n") };
         return;
       }
 
-      // -------------------------------------------------------------------
-      // 4) Call Gemini with the chosen product
-      // -------------------------------------------------------------------
-      const system = `
-You are AnyVolt’s product assistant.
-- ONLY answer based on the product data provided.
-- If the question doesn’t match this product, say so and ask the user to clarify.
-- Use short paragraphs; bullets are OK for specs.
-- Never invent features or prices.
-`.trim();
+      // ---------------------------------------------------
+      // 6. REAL AI CALL (Gemini) USING MASTER PROMPT
+      // ---------------------------------------------------
+      const systemPrompt = buildMasterPrompt({
+        product,
+      });
 
-      const productJson = "```json\n" + JSON.stringify(product, null, 2) + "\n```";
+
+      const productJson = JSON.stringify(product, null, 2);
+
       const body = {
         contents: [
-          { role: "user", parts: [{ text: system }] },
+          // Master instructions first
+          { role: "user", parts: [{ text: systemPrompt }] },
+          // Then user question + data
           {
             role: "user",
             parts: [
               {
                 text:
                   `USER QUESTION:\n${userQuestion}\n\n` +
-                  `PRODUCT DATA:\n${productJson}`,
+                  `PRODUCT_DATA (JSON):\n${productJson}`,
               },
             ],
           },
