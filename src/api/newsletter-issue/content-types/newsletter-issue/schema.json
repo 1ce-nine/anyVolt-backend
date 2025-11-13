@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_issues",
+  "info": {
+    "singularName": "newsletter-issue",
+    "pluralName": "newsletter-issues",
+    "displayName": "Newsletter Issue"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "subject": {
+      "type": "text",
+      "required": true
+    },
+    "preheader": {
+      "type": "string",
+      "required": false
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    },
+    "issueStatus": {
+      "type": "enumeration",
+      "default": "draft",
+      "enum": [
+        "draft",
+        "ready",
+        "sent"
+      ]
+    },
+    "sentAt": {
+      "type": "datetime"
+    }
+  }
+}

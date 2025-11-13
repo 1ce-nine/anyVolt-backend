@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "investment_summaries",
+  "info": {
+    "singularName": "investment-summary",
+    "pluralName": "investment-summaries",
+    "displayName": "Investment Summary"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "pdfFile": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ]
+    }
+  }
+}

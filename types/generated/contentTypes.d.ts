@@ -430,6 +430,109 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiEmbeddedVideoEmbeddedVideo
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'embedded_videos';
+  info: {
+    displayName: 'Embedded Video';
+    pluralName: 'embedded-videos';
+    singularName: 'embedded-video';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Blocks;
+    isFeatured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::embedded-video.embedded-video'
+    > &
+      Schema.Attribute.Private;
+    Media: Schema.Attribute.Media<'images'>;
+    platform: Schema.Attribute.Enumeration<['youtube', 'vimeo', 'other']> &
+      Schema.Attribute.DefaultTo<'youtube'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    videoUrl: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiInvestmentSummaryInvestmentSummary
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'investment_summaries';
+  info: {
+    displayName: 'Investment Summary';
+    pluralName: 'investment-summaries';
+    singularName: 'investment-summary';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::investment-summary.investment-summary'
+    > &
+      Schema.Attribute.Private;
+    pdfFile: Schema.Attribute.Media<'files'> & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiNewsletterIssueNewsletterIssue
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'newsletter_issues';
+  info: {
+    displayName: 'Newsletter Issue';
+    pluralName: 'newsletter-issues';
+    singularName: 'newsletter-issue';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    issueStatus: Schema.Attribute.Enumeration<['draft', 'ready', 'sent']> &
+      Schema.Attribute.DefaultTo<'draft'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::newsletter-issue.newsletter-issue'
+    > &
+      Schema.Attribute.Private;
+    preheader: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    sentAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    subject: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsletterSubscriptionNewsletterSubscription
   extends Struct.CollectionTypeSchema {
   collectionName: 'newsletter_subscriptions';
@@ -1077,6 +1180,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::embedded-video.embedded-video': ApiEmbeddedVideoEmbeddedVideo;
+      'api::investment-summary.investment-summary': ApiInvestmentSummaryInvestmentSummary;
+      'api::newsletter-issue.newsletter-issue': ApiNewsletterIssueNewsletterIssue;
       'api::newsletter-subscription.newsletter-subscription': ApiNewsletterSubscriptionNewsletterSubscription;
       'api::product.product': ApiProductProduct;
       'api::test.test': ApiTestTest;
