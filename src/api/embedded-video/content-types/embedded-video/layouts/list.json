@@ -1,0 +1,29 @@
+{
+  "settings": {
+    "bulkActions": true,
+    "pageSize": 10,
+    "defaultSortBy": "createdAt",
+    "defaultSortOrder": "DESC"
+  },
+  "layouts": [
+    [
+      {
+        "name": "title",
+        "label": "Title",
+        "sortable": true
+      },
+      {
+        "name": "platform",
+        "label": "Platform"
+      },
+      {
+        "name": "isFeatured",
+        "label": "Featured"
+      },
+      {
+        "name": "publishedAt",
+        "label": "Published At"
+      }
+    ]
+  ]
+}

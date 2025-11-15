@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   async echo(ctx) {
     ctx.body = {
       ok: true,

@@ -19,11 +19,16 @@
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
     "seed:run": "node ./scripts/seed.js",
-    "seed:strapi": "node scripts/seedProducts.strapi.cjs",
+    "seed:strapi": "node scripts/seedProducts.strapi.cjs && node scripts/seedEmbeddedVideos.strapi.cjs",
     "db:migrate": "knex migrate:latest --knexfile knexfile.cjs",
     "db:seed": "knex seed:run --knexfile knexfile.cjs",
     "db:reset": "npm run db:migrate && npm run seed:strapi",
-    "kb": "node server/kb-server.js"
+    "kb": "node server/kb-server.js",
+    "seed:embedded-videos": "node scripts/seedEmbeddedVideos.strapi.cjs",
+    "debug:embedded-videos": "node scripts/debugEmbeddedVideos.strapi.cjs",
+    "cleanup:embedded-videos": "node scripts/cleanupEmbeddedVideos.strapi.cjs"
+
+
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.25.0",

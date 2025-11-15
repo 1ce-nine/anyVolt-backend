@@ -1,0 +1,16 @@
+{
+  "sections": [
+    {
+      "sectionTitle": null,
+      "items": [
+        { "name": "title" },
+        { "name": "slug" },
+        { "name": "videoUrl" },
+        { "name": "platform" },
+        { "name": "description" },
+        { "name": "Media" },
+        { "name": "isFeatured" }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,10 @@
-export default [
+module.exports = [
   {
-    method: 'POST',
-    path: '/assistant-chat',                   // unique path to avoid collisions
-    handler: 'api::assistant.assistant.echo', // FULL UID to controller
-    config: { auth: false, policies: [] },
+    method: "POST",
+    path: "/assistant",
+    handler: "assistant.handle",
+    config: {
+      auth: false, // keep your existing config
+    },
   },
 ];
