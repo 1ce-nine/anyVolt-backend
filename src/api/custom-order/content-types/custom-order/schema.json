@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "custom_orders",
+  "info": {
+    "singularName": "custom-order",
+    "pluralName": "custom-orders",
+    "displayName": "Custom Order"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "businessName": {
+      "type": "string"
+    },
+    "contactPerson": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "statusCustomOrder": {
+      "type": "enumeration",
+      "default": "new",
+      "enum": [
+        "new",
+        "in_progress",
+        "quoted",
+        "closed"
+      ]
+    },
+    "formData": {
+      "type": "json"
+    }
+  }
+}

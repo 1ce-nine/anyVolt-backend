@@ -462,6 +462,42 @@ export interface ApiContactSubmissionContactSubmission
   };
 }
 
+export interface ApiCustomOrderCustomOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'custom_orders';
+  info: {
+    displayName: 'Custom Order';
+    pluralName: 'custom-orders';
+    singularName: 'custom-order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    businessName: Schema.Attribute.String;
+    contactPerson: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    formData: Schema.Attribute.JSON;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::custom-order.custom-order'
+    > &
+      Schema.Attribute.Private;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    statusCustomOrder: Schema.Attribute.Enumeration<
+      ['new', 'in_progress', 'quoted', 'closed']
+    > &
+      Schema.Attribute.DefaultTo<'new'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEmbeddedVideoEmbeddedVideo
   extends Struct.CollectionTypeSchema {
   collectionName: 'embedded_videos';
@@ -1213,6 +1249,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
+      'api::custom-order.custom-order': ApiCustomOrderCustomOrder;
       'api::embedded-video.embedded-video': ApiEmbeddedVideoEmbeddedVideo;
       'api::investment-summary.investment-summary': ApiInvestmentSummaryInvestmentSummary;
       'api::newsletter-issue.newsletter-issue': ApiNewsletterIssueNewsletterIssue;
